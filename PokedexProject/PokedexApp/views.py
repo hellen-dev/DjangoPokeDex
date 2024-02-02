@@ -55,7 +55,7 @@ def get_pokemon_data(request):
     # Initialize an empty list to store Pokemon data
     pokemon_list = []
 
-    #Pagination
+    # Pagination
     page_number = request.GET.get('page', 1)
 
     # Iterate through Pokemon IDs and fetchs data
@@ -83,7 +83,7 @@ def get_pokemon_data(request):
 def get_pokemon_by_weight(request):
     pokemon_list = []
 
-    #Pagination
+    # Pagination
     page_number = request.GET.get('page', 1)
 
     # Iterate through Pokemon IDs and fetchs data
@@ -111,6 +111,8 @@ def get_pokemon_by_weight(request):
 # Gets all type "grass" Pokemon
 def get_grass_pokemon(request):
     pokemon_list = []
+
+    # Pagination
     page_number = request.GET.get('page', 1)
 
     for i in range(1, 51):
@@ -130,6 +132,7 @@ def get_grass_pokemon(request):
             # Terminates the loop if an error occurs in the request.
             break
 
+    # Create a Paginator object with 20 items per page
     paginator = Paginator(pokemon_list, 20)
     try:
         pokemon_list = paginator.page(page_number)
@@ -139,3 +142,36 @@ def get_grass_pokemon(request):
         pokemon_list = paginator.page(paginator.num_pages)
 
     return render(request, 'grass_pokemon.html', {'pokemon_list': pokemon_list})
+
+# Creating fourth view
+# All type “Flying” Pokemon that height more than 10
+def get_flying_pokemon(request):
+    pokemon_list = []
+
+    # Pagination
+    page_number = request.GET.get('page', 1)
+
+    for i in range(1, 51):
+        try:
+            data = fetch_pokemon_data(i)
+
+             # Checks if the Pokémon is of the "Flying" type and has a height greater than 10.
+            if any(type_info['type']['name'] == "flying" for type_info in data['types']) and data['height'] > 10:
+                pokemon_instance, sprite_url = create_or_get_pokemon(data)
+                pokemon_data = format_pokemon_data(pokemon_instance, sprite_url) 
+                pokemon_list.append(pokemon_data)
+
+        except requests.exceptions.RequestException:
+            # Terminates the loop if an error occurs in the request.
+            break
+    
+    # Create a Paginator object with 20 items per page
+    paginator = Paginator(pokemon_list, 20)
+    try:
+        pokemon_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        pokemon_list = paginator.page(1)
+    except EmptyPage:
+        pokemon_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'flying_pokemon.html', {'pokemon_list': pokemon_list})

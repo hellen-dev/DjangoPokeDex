@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import get_pokemon_data, get_pokemon_by_weight, get_grass_pokemon
+from .views import get_pokemon_data, get_pokemon_by_weight, get_grass_pokemon, get_flying_pokemon
 
 # Setting urls and pagination
 urlpatterns = [
@@ -11,4 +11,7 @@ urlpatterns = [
 
     path('get_grass_pokemon/', get_grass_pokemon, name='get_grass_pokemon'),
     path('get_grass_pokemon/<int:page>/', get_grass_pokemon, name='get_grass_pokemon_paginated'),
+
+    path('get_flying_pokemon/', get_flying_pokemon, name='get_flying_pokemon'),
+    path('get_flying_pokemon/<int:page>/', get_flying_pokemon, name='get_flying_pokemon_paginated'),
 ]
