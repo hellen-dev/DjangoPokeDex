@@ -115,10 +115,10 @@ def get_grass_pokemon(request):
 
     for i in range(1, 51):
         try:
-            # Faz uma solicitação à API para obter informações sobre o Pokémon
+            # Makes a request to the API to obtain information about the Pokémon
             data = fetch_pokemon_data(i)
 
-            # Verifica se o Pokémon é do tipo "Grass"
+            # Checks if the Pokémon is of the "Grass" type.
             grass_type = any(type_info['type']['name'] == "grass" for type_info in data['types'])
 
             if grass_type:
@@ -127,7 +127,7 @@ def get_grass_pokemon(request):
                 pokemon_list.append(pokemon_data)
 
         except requests.exceptions.RequestException:
-            # Encerra o loop se ocorrer um erro na solicitação
+            # Terminates the loop if an error occurs in the request.
             break
 
     paginator = Paginator(pokemon_list, 20)
