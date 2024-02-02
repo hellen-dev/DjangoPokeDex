@@ -107,3 +107,35 @@ def get_pokemon_by_weight(request):
 
     return render(request, 'pokemon_by_weight.html', {'pokemon_list': pokemon_list})
 
+# Creating third view.
+# Gets all type "grass" Pokemon
+def get_grass_pokemon(request):
+    pokemon_list = []
+    page_number = request.GET.get('page', 1)
+
+    for i in range(1, 51):
+        try:
+            # Faz uma solicitação à API para obter informações sobre o Pokémon
+            data = fetch_pokemon_data(i)
+
+            # Verifica se o Pokémon é do tipo "Grass"
+            grass_type = any(type_info['type']['name'] == "grass" for type_info in data['types'])
+
+            if grass_type:
+                pokemon_instance, sprite_url = create_or_get_pokemon(data)
+                pokemon_data = format_pokemon_data(pokemon_instance, sprite_url) 
+                pokemon_list.append(pokemon_data)
+
+        except requests.exceptions.RequestException:
+            # Encerra o loop se ocorrer um erro na solicitação
+            break
+
+    paginator = Paginator(pokemon_list, 20)
+    try:
+        pokemon_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        pokemon_list = paginator.page(1)
+    except EmptyPage:
+        pokemon_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'grass_pokemon.html', {'pokemon_list': pokemon_list})
