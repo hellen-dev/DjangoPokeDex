@@ -49,3 +49,30 @@ def format_pokemon_data(pokemon_instance, sprite_url):
         'is_default': pokemon_instance.is_default,
         'sprite_url': sprite_url,
     }
+
+# Creating the first view for 50 pokémons
+def get_pokemon_data(request):
+    pokemon_list = []
+
+    #Pagination
+    page_number = request.GET.get('page', 1)
+
+    # Iterate through Pokemon IDs and fetchs data
+    for i in range(1, 51):
+        data = fetch_pokemon_data(i)
+        pokemon_instance, sprite_url = create_or_get_pokemon(data)
+        pokemon_data = format_pokemon_data(pokemon_instance, sprite_url) 
+
+        # Append the formatted data to the Pokemon list
+        pokemon_list.append(pokemon_data)
+
+    # Create a Paginator object with 20 items per page
+    paginator = Paginator(pokemon_list, 20)
+    try:
+        pokemon_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        pokemon_list = paginator.page(1)  # Se o parâmetro da página não for um número inteiro, exibe a primeira página
+    except EmptyPage:
+        pokemon_list = paginator.page(paginator.num_pages)  # Se a página solicitada estiver além do limite, exibe a última página
+
+    return render(request, 'index.html', {'pokemon_list': pokemon_list})
