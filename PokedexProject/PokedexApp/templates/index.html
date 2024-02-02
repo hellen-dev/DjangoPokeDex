@@ -4,9 +4,16 @@
 {% load static %}
 
 <head>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nabla&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex with Django</title>
+
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" crossorigin="anonymous"/>
 
@@ -14,7 +21,12 @@
 <body>
     <!-- nav menu -->
     <header>
-        <h1>Pokédex</h1>
+
+        <div class="logo-container">
+            <img src="{%static 'img/pokedex.png'%}" alt="">
+            <h1>PokéDex</h1>
+        </div>
+
         <nav>
             <ul>
                 <li><a href="{% url 'get_pokemon_by_weight' %}">Pokemon by Weight</a></li>
@@ -23,6 +35,7 @@
                 <li><a href="{% url 'inverted_names' %}">Inverted Names</a></li>
             </ul>
         </nav>
+        
     </header>
 
     <!-- container for pokemon's info -->
