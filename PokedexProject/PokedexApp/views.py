@@ -175,3 +175,42 @@ def get_flying_pokemon(request):
         pokemon_list = paginator.page(paginator.num_pages)
 
     return render(request, 'flying_pokemon.html', {'pokemon_list': pokemon_list})
+
+# Creating fifth view
+# All inverted names of the Pokemon
+def inverted_names(request):
+    pokemon_list = []
+
+    # Pagination
+    page_number = request.GET.get('page', 1)
+
+    for i in range(1, 51):
+        try:
+            data = fetch_pokemon_data(i)
+
+            sprite_url = data['sprites']['front_default'] if 'sprites' in data and 'front_default' in data['sprites'] else ''
+
+            # Reverse the name of the Pokemon
+            inverted_name = data['name'][::-1] 
+
+            # Append Pokemon data to the list, including ID, name, sprite URL, and inverted name
+            pokemon_list.append({
+                'id': data['id'],
+                'name': data['name'],
+                'sprite_url': sprite_url,
+                'inverted_name': inverted_name,
+            })
+
+        except requests.exceptions.RequestException:
+            # Break the loop if an error occurs in the request
+            break
+    # Create a Paginator object with 20 items per page        
+    paginator = Paginator(pokemon_list, 20)
+    try:
+        pokemon_list = paginator.page(page_number)
+    except PageNotAnInteger:
+        pokemon_list = paginator.page(1)
+    except EmptyPage:
+        pokemon_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'inverted_names.html', {'pokemon_list': pokemon_list})
