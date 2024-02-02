@@ -214,3 +214,4 @@ def inverted_names(request):
         pokemon_list = paginator.page(paginator.num_pages)
 
     return render(request, 'inverted_names.html', {'pokemon_list': pokemon_list})
+
