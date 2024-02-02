@@ -11,7 +11,7 @@ Before you begin, make sure you have Python and Django installed. You can instal
 pip install -r requirements.txt
 
 ## Database Configuration
-
+Apply migrations to set up the database schema:
 ```bash```
 python manage.py migrate
 
